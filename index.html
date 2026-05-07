@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ernest Jef David C. Auman — IT Student Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&amp;family=DM+Sans:wght@300;400;500&amp;display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue-light: #E6F1FB;
+    --blue-mid: #378ADD;
+    --blue-dark: #0C447C;
+    --gray-light: #F1EFE8;
+    --gray-mid: #888780;
+    --gray-dark: #2C2C2A;
+    --text: #1a1a1a;
+    --text-muted: #6b6b68;
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --border: rgba(0,0,0,0.08);
+    --accent: #185FA5;
+    --radius: 14px;
+    --transition: 0.35s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1rem 2.5rem;
+    background: rgba(250,250,248,0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    animation: slideDown 0.6s ease forwards;
+  }
+  @keyframes slideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .nav-logo { font-family: 'DM Serif Display', serif; font-size: 18px; letter-spacing: -0.02em; font-weight: bold;}
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { font-size: 14px; color: var(--text-muted); text-decoration: none; transition: color var(--transition); }
+  .nav-links a:hover { color: var(--accent); }
+
+  .hero {
+    min-height: 100vh; display: flex; align-items: center;
+    padding: 8rem 2.5rem 4rem; position: relative; overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background: radial-gradient(ellipse 80% 60% at 70% 40%, #dceefb 0%, transparent 70%),
+                radial-gradient(ellipse 50% 40% at 10% 80%, #e8f0e4 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero-inner { position: relative; z-index: 1; max-width: 680px; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--blue-light); color: var(--blue-dark);
+    font-size: 12px; font-weight: 500; padding: 5px 14px;
+    border-radius: 20px; margin-bottom: 1.5rem;
+    animation: fadeUp 0.7s 0.1s both;
+  }
+  .hero-badge span { width: 6px; height: 6px; border-radius: 50%; background: var(--blue-mid); display: inline-block; }
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    line-height: 1.1; letter-spacing: -0.03em; color: var(--gray-dark);
+    animation: fadeUp 0.7s 0.2s both; margin-bottom: 1.2rem;
+  }
+  .hero h1 em { font-style: normal; color: var(--blue-mid); }
+  .hero-bio { font-size: 16px; color: var(--text-muted); max-width: 500px; animation: fadeUp 0.7s 0.3s both; margin-bottom: 2rem; }
+  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; animation: fadeUp 0.7s 0.4s both; }
+  .btn-primary {
+    background: var(--blue-mid); color: #fff; padding: 11px 24px;
+    border-radius: 30px; font-size: 14px; font-weight: 500; text-decoration: none;
+    transition: background var(--transition), transform var(--transition);
+    border: none; cursor: pointer; display: inline-block;
+  }
+  .btn-primary:hover { background: var(--blue-dark); transform: translateY(-2px); }
+  .btn-outline {
+    background: transparent; color: var(--text); padding: 11px 24px;
+    border-radius: 30px; font-size: 14px; font-weight: 500; text-decoration: none;
+    border: 1px solid var(--border); transition: border-color var(--transition), transform var(--transition);
+    cursor: pointer; display: inline-block;
+  }
+  .btn-outline:hover { border-color: var(--blue-mid); color: var(--blue-mid); transform: translateY(-2px); }
+
+  .photo-area {
+    position: absolute; right: 8rem; top: 50%; transform: translateY(-50%);
+    z-index: 1; animation: fadeUp 0.7s 0.5s both;
+  }
+  .photo-circle {
+    width: 280px; height: 280px; border-radius: 50%;
+    border: 3px dashed var(--blue-mid); display: flex; flex-direction: column;
+    align-items: center; justify-content: center; cursor: pointer;
+    background: var(--blue-light); transition: all var(--transition); overflow: hidden;
+  }
+  .photo-circle:hover { border-color: var(--blue-dark); background: #d4e9f7; }
+  .photo-circle img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+  .upload-hint { text-align: center; padding: 1rem; pointer-events: none; display: none;}
+  .upload-hint svg { margin-bottom: 8px; opacity: 0.5; }
+  .upload-hint p { font-size: 12px; color: var(--text-muted); }
+  #photoInput { display: none; }
+
+  section { padding: 4rem 2.5rem; max-width: 1000px; margin: 0 auto; }
+  .section-label {
+    font-size: 11px; font-weight: 500; text-transform: uppercase;
+    letter-spacing: 0.12em; color: var(--text-muted); margin-bottom: 2.5rem;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .about-card {
+    background: var(--surface); border-radius: var(--radius);
+    border: 1px solid var(--border); padding: 2rem;
+    transition: transform var(--transition), box-shadow var(--transition);
+  }
+  .about-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.07); }
+  .about-card h3 { font-size: 16px; font-weight: 500; margin-bottom: 12px; color: var(--text); }
+  .about-card p { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+
+  .skills-wrap { display: flex; flex-wrap: wrap; gap: 12px; }
+  .skill-pill {
+    font-size: 14px; padding: 10px 20px; border-radius: 30px;
+    border: 1px solid var(--border); background: var(--surface); color: var(--text);
+    transition: all var(--transition); cursor: default;
+  }
+  .skill-pill:hover { background: var(--blue-light); border-color: var(--blue-mid); color: var(--blue-dark); transform: translateY(-2px); }
+
+  .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+  .project-card {
+    background: var(--surface); border-radius: var(--radius);
+    border: 1px solid var(--border); padding: 2rem;
+    transition: transform var(--transition), box-shadow var(--transition);
+    position: relative; overflow: hidden;
+  }
+  .project-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--blue-mid); }
+  .project-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.07); }
+  .project-card h3 { font-size: 16px; font-weight: 500; margin-bottom: 10px; color: var(--text); }
+  .project-card p { font-size: 14px; color: var(--text-muted); line-height: 1.5; margin-bottom: 16px; }
+  .project-tag { font-size: 12px; padding: 4px 12px; border-radius: 12px; background: var(--blue-light); color: var(--blue-mid); display: inline-block; margin: 2px; }
+  .add-project-btn {
+    background: transparent; border: 1.5px dashed var(--border);
+    border-radius: var(--radius); padding: 2rem; width: 100%;
+    cursor: pointer; color: var(--text-muted); font-size: 14px;
+    font-family: 'DM Sans', sans-serif; transition: all var(--transition);
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    min-height: 200px;
+  }
+  .add-project-btn:hover { border-color: var(--blue-mid); color: var(--blue-mid); background: var(--blue-light); }
+
+  .timeline { position: relative; padding-left: 1.5rem; }
+  .timeline::before { content: ''; position: absolute; left: 0; top: 6px; bottom: 6px; width: 1px; background: var(--border); }
+  .timeline-item { position: relative; margin-bottom: 2.5rem; }
+  .timeline-item::before {
+    content: ''; position: absolute; left: -1.85rem; top: 6px;
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--blue-mid); border: 2px solid var(--surface);
+  }
+  .timeline-item h3 { font-size: 16px; font-weight: 500; color: var(--text); }
+  .timeline-item .meta { font-size: 14px; color: var(--text-muted); margin: 4px 0 10px; }
+  .timeline-item p, .timeline-item li { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+  .timeline-item ul { padding-left: 1.2rem; }
+  .timeline-item li { margin-bottom: 4px; }
+
+  .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+  .contact-item {
+    background: var(--surface); border-radius: var(--radius);
+    border: 1px solid var(--border); padding: 1.5rem;
+    display: flex; align-items: center; gap: 16px;
+    transition: all var(--transition); text-decoration: none; color: var(--text);
+  }
+  .contact-item:hover { border-color: var(--blue-mid); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
+  .contact-icon { width: 44px; height: 44px; border-radius: 10px; background: var(--blue-light); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .contact-icon svg { width: 20px; height: 20px; stroke: var(--blue-dark); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .contact-info .label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 2px;}
+  .contact-info .val { font-size: 14px; font-weight: 500; word-break: break-all; }
+
+  footer { text-align: center; padding: 4rem 2rem; font-size: 13px; color: var(--text-muted); border-top: 1px solid var(--border); margin-top: 2rem;}
+  footer a { color: var(--accent); text-decoration: none; }
+
+  .download-fab {
+    position: fixed; bottom: 2rem; right: 2rem; z-index: 99;
+    background: var(--accent); color: #fff;
+    width: 56px; height: 56px; border-radius: 50%; border: none;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 20px rgba(24,95,165,0.35);
+    transition: transform var(--transition), box-shadow var(--transition);
+  }
+  .download-fab:hover { transform: scale(1.1); box-shadow: 0 8px 28px rgba(24,95,165,0.45); }
+  .download-fab svg { width: 24px; height: 24px; stroke: #fff; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  .resume-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
+  .resume-sub { font-size: 13px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 1.5rem; }
+
+  @media (max-width: 768px) {
+    .photo-area { display: none; }
+    .about-grid, .resume-cols { grid-template-columns: 1fr; }
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { gap: 1rem; }
+    section { padding: 3.5rem 1.5rem; }
+    .hero { padding: 7rem 1.5rem 3rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-logo">Ernest Auman</span>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#resume">Resume</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-inner">
+    <div class="hero-badge"><span></span> Available for internship &amp; opportunities</div>
+    <h1>Hi, I'm <em>Ernest</em><br>IT Student &amp; Web Enthusiast</h1>
+    <p class="hero-bio">I'm a 4th year Information Technology student at University of Cebu who loves web design, photography, and building things with technology.</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary">Get in touch</a>
+      <a href="#projects" class="btn-outline">View projects</a>
+    </div>
+  </div>
+  <div class="photo-area">
+    <div class="photo-circle" onclick="document.getElementById('photoInput').click()">
+      <!-- Your actual picture is now here -->
+      <img id="profileImg" src="resume_photo.png" alt="Ernest Auman" style="display: block; border-radius: 50%; width: 100%; height: 100%; object-fit: cover;">
+      <div class="upload-hint" id="uploadHint" style="display: none;">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+        <p>Upload Photo</p>
+      </div>
+    </div>
+    <input type="file" id="photoInput" accept="image/*">
+  </div>
+</div>
+
+<section id="about" class="reveal">
+  <div class="section-label">About Me</div>
+  <div class="about-grid">
+    <div class="about-card">
+      <h3>Career Objective</h3>
+      <p>Detail-oriented IT student seeking opportunities to apply technical support, troubleshooting, and system analysis skills in a professional IT environment. Committed to delivering efficient solutions and continuously expanding technical knowledge.</p>
+    </div>
+    <div class="about-card">
+      <h3>Education</h3>
+      <p><strong>University of Cebu</strong><br>Bachelor of Science in Information Technology<br>Expected graduation: 2026</p>
+    </div>
+  </div>
+</section>
+
+<section id="skills" class="reveal">
+  <div class="section-label">Skills &amp; Tools</div>
+  <div class="skills-wrap">
+    <span class="skill-pill">HTML</span>
+    <span class="skill-pill">CSS</span>
+    <span class="skill-pill">Python</span>
+    <span class="skill-pill">MS Office</span>
+    <span class="skill-pill">Photography</span>
+    <span class="skill-pill">Photo Editing</span>
+    <span class="skill-pill">Graphic Design</span>
+    <span class="skill-pill">Photoshop</span>
+    <span class="skill-pill">Canva</span>
+    <span class="skill-pill">Team Collaboration</span>
+    <span class="skill-pill">Client Relations</span>
+    <span class="skill-pill">Self-Motivation</span>
+    <span class="skill-pill">Cisco Networking</span>
+    <span class="skill-pill">Data Labeling / AI</span>
+  </div>
+</section>
+
+<section id="projects" class="reveal">
+  <div class="section-label">Projects</div>
+  <div class="projects-grid">
+    <div class="project-card">
+      <h3>AI Innovations Showcase</h3>
+      <p>Exhibited a project at the Student Showcase highlighting creativity and technical application of artificial intelligence.</p>
+      <span class="project-tag">AI</span> <span class="project-tag">Innovation</span>
+    </div>
+    <div class="project-card">
+      <h3>Short Film Editing</h3>
+      <p>Edited short films and school presentations, ensuring clear communication and engaging visual storytelling.</p>
+      <span class="project-tag">Video Editing</span> <span class="project-tag">Storytelling</span>
+    </div>
+    <button class="add-project-btn">+ Add a project</button>
+  </div>
+</section>
+
+<section id="resume" class="reveal">
+  <div class="section-label">Resume</div>
+  <div class="resume-cols">
+    <div>
+      <div class="resume-sub">Experience</div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <h3>Data Labeler</h3>
+          <div class="meta">ATLAS Capture (Remote) · Jan 2026 – Mar 2026</div>
+          <p>Labeled and annotated data to help train AI systems to recognize and understand content patterns.</p>
+        </div>
+        <div class="timeline-item">
+          <h3>Food Server</h3>
+          <div class="meta">Mango Sticky Rice ni Minmin · Nov – Dec 2025</div>
+          <p>Provided customer service at two branches in Mandaue City and Cebu City.</p>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="resume-sub">Achievements</div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <h3>AI Innovations Student Showcase</h3>
+          <div class="meta">University of Cebu</div>
+          <p>Exhibited a creative AI project demonstrating technical skills and innovation.</p>
+        </div>
+        <div class="timeline-item">
+          <h3>Cisco Networking Academy</h3>
+          <div class="meta">Professional Training</div>
+          <p>Completed foundational training in networking and IT systems.</p>
+        </div>
+        <div class="timeline-item">
+          <h3>Film &amp; Presentation Production</h3>
+          <div class="meta">Academic Projects</div>
+          <p>Edited short films and presentations with clear communication and engaging visuals.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="reveal">
+  <div class="section-label">Get in Touch</div>
+  <div class="contact-grid">
+    <div class="contact-item">
+      <div class="contact-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+      </div>
+      <div class="contact-info">
+        <div class="label">Email</div>
+        <div class="val">jefauman2004@gmail.com</div>
+      </div>
+    </div>
+    <div class="contact-item">
+      <div class="contact-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+      </div>
+      <div class="contact-info">
+        <div class="label">Phone</div>
+        <div class="val">+63 9910711068</div>
+      </div>
+    </div>
+    <div class="contact-item">
+      <div class="contact-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+      </div>
+      <div class="contact-info">
+        <div class="label">Github</div>
+        <div class="val">github.com/Aumanpogii</div>
+      </div>
+    </div>
+    <div class="contact-item">
+      <div class="contact-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+      </div>
+      <div class="contact-info">
+        <div class="label">Location</div>
+        <div class="val">San Antonio Jakosalem St., Cebu City</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Designed &amp; built by <strong>Ernest Jef David C. Auman</strong> · BS Information Technology, University of Cebu</p>
+  <p>&copy; 2025 All rights reserved</p>
+</footer>
+
+<button class="download-fab" title="Download Resume">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+</button>
+
+<script>
+  // Reveal animations on scroll
+  const revealElements = document.querySelectorAll('.reveal');
+  const revealOnScroll = () => {
+    for (let i = 0; i < revealElements.length; i++) {
+      const windowHeight = window.innerHeight;
+      const elementTop = revealElements[i].getBoundingClientRect().top;
+      const elementVisible = 100;
+      if (elementTop < windowHeight - elementVisible) {
+        revealElements[i].classList.add('visible');
+      }
+    }
+  };
+  window.addEventListener('scroll', revealOnScroll);
+  revealOnScroll(); // Trigger once on load
+
+  // Photo Upload Logic
+  const photoInput = document.getElementById('photoInput');
+  const profileImg = document.getElementById('profileImg');
+  const uploadHint = document.getElementById('uploadHint');
+
+  photoInput.addEventListener('change', function() {
+    const file = this.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        profileImg.src = e.target.result;
+        profileImg.style.display = 'block';
+        uploadHint.style.display = 'none';
+      }
+      reader.readAsDataURL(file);
+    }
+  });
+</script>
+
+</body>
+</html>
